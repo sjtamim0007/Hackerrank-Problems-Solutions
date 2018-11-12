@@ -3,18 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataStructure;
+package dataStructure.array;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
 
 /**
  *
  * @author tamim
  */
-public class ReverseALinkedList {
+public class PrintInReverse {
 
     static class SinglyLinkedListNode {
 
@@ -50,18 +47,18 @@ public class ReverseALinkedList {
         }
     }
 
-    public static void printSinglyLinkedList(SinglyLinkedListNode node, String sep, BufferedWriter bufferedWriter) throws IOException {
+    public static void printSinglyLinkedList(SinglyLinkedListNode node, String sep) {
         while (node != null) {
-            bufferedWriter.write(String.valueOf(node.data));
+            System.out.print(node.data);
 
             node = node.next;
 
             if (node != null) {
-                bufferedWriter.write(sep);
+                System.out.print(sep);
             }
         }
     }
-    // Complete the reverse function below.
+    // Complete the reversePrint function below.
 
     /*
      * For your reference:
@@ -72,28 +69,16 @@ public class ReverseALinkedList {
      * }
      *
      */
-    static SinglyLinkedListNode reverse(SinglyLinkedListNode head) {
-        SinglyLinkedListNode current = head;
-        SinglyLinkedListNode nextNode = null;
-        SinglyLinkedListNode previousNode = null;
-
-        while (current != null) {
-            nextNode = current.next;
-            current.next = previousNode;
-            previousNode = current;
-            current = nextNode;
+    static void reversePrint(SinglyLinkedListNode head) {
+        if (head != null) {
+            reversePrint(head.next);
+            System.out.println(head.data);
         }
-
-        head = previousNode;
-
-        return head;
-
     }
+
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException {
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
-
+    public static void main(String[] args) {
         int tests = scanner.nextInt();
         scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
@@ -110,13 +95,8 @@ public class ReverseALinkedList {
                 llist.insertNode(llistItem);
             }
 
-            SinglyLinkedListNode llist1 = reverse(llist.head);
-
-            printSinglyLinkedList(llist1, " ", bufferedWriter);
-            bufferedWriter.newLine();
+            reversePrint(llist.head);
         }
-
-        bufferedWriter.close();
 
         scanner.close();
     }

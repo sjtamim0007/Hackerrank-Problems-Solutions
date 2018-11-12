@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataStructure;
+package dataStructure.linkedlist;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -14,7 +14,7 @@ import java.util.Scanner;
  *
  * @author tamim
  */
-public class InsertANodeAtTheHeadOfALinkedlist {
+public class DeleteANode {
 
     static class SinglyLinkedListNode {
 
@@ -37,6 +37,17 @@ public class InsertANodeAtTheHeadOfALinkedlist {
             this.tail = null;
         }
 
+        public void insertNode(int nodeData) {
+            SinglyLinkedListNode node = new SinglyLinkedListNode(nodeData);
+
+            if (this.head == null) {
+                this.head = node;
+            } else {
+                this.tail.next = node;
+            }
+
+            this.tail = node;
+        }
     }
 
     public static void printSinglyLinkedList(SinglyLinkedListNode node, String sep, BufferedWriter bufferedWriter) throws IOException {
@@ -50,12 +61,39 @@ public class InsertANodeAtTheHeadOfALinkedlist {
             }
         }
     }
+    // Complete the deleteNode function below.
 
-    static SinglyLinkedListNode insertNodeAtHead(SinglyLinkedListNode llist, int data) {
-        SinglyLinkedListNode newNode = new SinglyLinkedListNode(data);
-        newNode.next = llist;
-        llist = newNode;
-        return llist;
+    /*
+     * For your reference:
+     *
+     * SinglyLinkedListNode {
+     *     int data;
+     *     SinglyLinkedListNode next;
+     * }
+     *
+     */
+    static SinglyLinkedListNode deleteNode(SinglyLinkedListNode head, int position) {
+        if (position == 0) {
+            head = head.next;
+            return head;
+        }
+
+        SinglyLinkedListNode previous = null;
+        SinglyLinkedListNode current = head;
+
+        for (int i = 1; i <= position && current.next != null; i++) {
+            previous = current;
+            current = current.next;
+        }
+
+        if (current.next != null) {
+            previous.next = current.next;
+        } else {
+            previous.next = null;
+        }
+
+        return head;
+
     }
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -71,12 +109,15 @@ public class InsertANodeAtTheHeadOfALinkedlist {
             int llistItem = scanner.nextInt();
             scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-            SinglyLinkedListNode llist_head = insertNodeAtHead(llist.head, llistItem);
-
-            llist.head = llist_head;
+            llist.insertNode(llistItem);
         }
 
-        printSinglyLinkedList(llist.head, "\n", bufferedWriter);
+        int position = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        SinglyLinkedListNode llist1 = deleteNode(llist.head, position);
+
+        printSinglyLinkedList(llist1, " ", bufferedWriter);
         bufferedWriter.newLine();
 
         bufferedWriter.close();

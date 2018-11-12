@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataStructure;
+package dataStructure.linkedlist;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -14,7 +14,7 @@ import java.util.Scanner;
  *
  * @author tamim
  */
-public class CompareTwoLinkedLists {
+public class DeleteDuplicateValueNodesFromASortedLinkedList {
 
     static class SinglyLinkedListNode {
 
@@ -61,7 +61,7 @@ public class CompareTwoLinkedLists {
             }
         }
     }
-    // Complete the compareLists function below.
+    // Complete the removeDuplicates function below.
 
     /*
      * For your reference:
@@ -72,55 +72,45 @@ public class CompareTwoLinkedLists {
      * }
      *
      */
-    static boolean compareLists(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
-        if (head1 != null && head2 != null) {
-            if (head1.data == head2.data) {
-                return compareLists(head1.next, head2.next);
+    static SinglyLinkedListNode removeDuplicates(SinglyLinkedListNode head) {
+        SinglyLinkedListNode current = head;
+        while (head.next != null) {
+            if (head.data == head.next.data) {
+                if (head.next.next == null) {
+                    head.next = null;
+                } else {
+                    head.next = head.next.next;
+                }
             } else {
-                return false;
+                head = head.next;
             }
-        } else if (head1 == null && head2 == null) {
-            return true;
-        } else {
-            return false;
         }
+        return current;
     }
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-        int tests = scanner.nextInt();
+        int t = scanner.nextInt();
         scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-        for (int testsItr = 0; testsItr < tests; testsItr++) {
-            SinglyLinkedList llist1 = new SinglyLinkedList();
+        for (int tItr = 0; tItr < t; tItr++) {
+            SinglyLinkedList llist = new SinglyLinkedList();
 
-            int llist1Count = scanner.nextInt();
+            int llistCount = scanner.nextInt();
             scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-            for (int i = 0; i < llist1Count; i++) {
-                int llist1Item = scanner.nextInt();
+            for (int i = 0; i < llistCount; i++) {
+                int llistItem = scanner.nextInt();
                 scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-                llist1.insertNode(llist1Item);
+                llist.insertNode(llistItem);
             }
 
-            SinglyLinkedList llist2 = new SinglyLinkedList();
+            SinglyLinkedListNode llist1 = removeDuplicates(llist.head);
 
-            int llist2Count = scanner.nextInt();
-            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-            for (int i = 0; i < llist2Count; i++) {
-                int llist2Item = scanner.nextInt();
-                scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
-
-                llist2.insertNode(llist2Item);
-            }
-
-            boolean result = compareLists(llist1.head, llist2.head);
-
-            bufferedWriter.write(String.valueOf(result ? 1 : 0));
+            printSinglyLinkedList(llist1, " ", bufferedWriter);
             bufferedWriter.newLine();
         }
 

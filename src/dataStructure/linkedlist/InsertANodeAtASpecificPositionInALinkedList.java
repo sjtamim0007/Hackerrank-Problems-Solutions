@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataStructure;
+package dataStructure.linkedlist;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -14,7 +14,7 @@ import java.util.Scanner;
  *
  * @author tamim
  */
-public class InsertANodeAtTheTailOfALinkedList {
+public class InsertANodeAtASpecificPositionInALinkedList {
 
     static class SinglyLinkedListNode {
 
@@ -30,11 +30,24 @@ public class InsertANodeAtTheTailOfALinkedList {
     static class SinglyLinkedList {
 
         public SinglyLinkedListNode head;
+        public SinglyLinkedListNode tail;
 
         public SinglyLinkedList() {
             this.head = null;
+            this.tail = null;
         }
 
+        public void insertNode(int nodeData) {
+            SinglyLinkedListNode node = new SinglyLinkedListNode(nodeData);
+
+            if (this.head == null) {
+                this.head = node;
+            } else {
+                this.tail.next = node;
+            }
+
+            this.tail = node;
+        }
     }
 
     public static void printSinglyLinkedList(SinglyLinkedListNode node, String sep, BufferedWriter bufferedWriter) throws IOException {
@@ -48,7 +61,7 @@ public class InsertANodeAtTheTailOfALinkedList {
             }
         }
     }
-    // Complete the insertNodeAtTail function below.
+    // Complete the insertNodeAtPosition function below.
 
     /*
      * For your reference:
@@ -59,21 +72,32 @@ public class InsertANodeAtTheTailOfALinkedList {
      * }
      *
      */
-    static SinglyLinkedListNode insertNodeAtTail(SinglyLinkedListNode head, int data) {
+    static SinglyLinkedListNode insertNodeAtPosition(SinglyLinkedListNode head, int data, int position) {
         SinglyLinkedListNode newNode = new SinglyLinkedListNode(data);
+        SinglyLinkedListNode current = head;
 
         if (head == null) {
             head = newNode;
             return head;
-        } else {
-            SinglyLinkedListNode node = head;
-            while (node.next != null) {
-                node = node.next;
-            }
-            node.next = newNode;
-            //node.next.data = data;
         }
-        return head;
+
+        if (position == 0) {
+            newNode.next = head;
+            head = newNode;
+            return head;
+        }
+
+        for (int i = 1; i < position && head.next != null; i++) {
+            head = head.next;
+        }
+
+        if (head.next != null) {
+            newNode.next = head.next;
+            head.next = newNode;
+        } else {
+            head.next = newNode;
+        }
+        return current;
     }
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -89,12 +113,18 @@ public class InsertANodeAtTheTailOfALinkedList {
             int llistItem = scanner.nextInt();
             scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-            SinglyLinkedListNode llist_head = insertNodeAtTail(llist.head, llistItem);
-
-            llist.head = llist_head;
+            llist.insertNode(llistItem);
         }
 
-        printSinglyLinkedList(llist.head, "\n", bufferedWriter);
+        int data = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        int position = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        SinglyLinkedListNode llist_head = insertNodeAtPosition(llist.head, data, position);
+
+        printSinglyLinkedList(llist_head, " ", bufferedWriter);
         bufferedWriter.newLine();
 
         bufferedWriter.close();

@@ -3,18 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dataStructure;
+package dataStructure.linkedlist;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
  *
  * @author tamim
  */
-public class MergeTwoSortedLinkedlists {
+public class FindMergePointOfTwoLists {
 
     static class SinglyLinkedListNode {
 
@@ -61,7 +63,7 @@ public class MergeTwoSortedLinkedlists {
             }
         }
     }
-    // Complete the mergeLists function below.
+    // Complete the findMergeNode function below.
 
     /*
      * For your reference:
@@ -72,24 +74,23 @@ public class MergeTwoSortedLinkedlists {
      * }
      *
      */
-    static SinglyLinkedListNode mergeLists(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
-        if (head1 == null && head2 == null) {
-            return null;
-        } else if (head1 == null) {
-            return head2;
-        } else if (head2 == null) {
-            return head1;
+    static int findMergeNode(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
+        SinglyLinkedListNode firstNode = head1;
+        SinglyLinkedListNode secondNode = head2;
+        List<SinglyLinkedListNode> list = new ArrayList<>();
+        while (firstNode != null) {
+            list.add(firstNode);
+            firstNode = firstNode.next;
         }
-        if (head1.data <= head2.data) {
-            head1.next = mergeLists(head1.next, head2);
-        } else {
-            SinglyLinkedListNode current = head2;
-            head2 = head2.next;
-            current.next = head1;
-            head1 = current;
-            head1.next = mergeLists(head1.next, head2);
+
+        while (secondNode != null) {
+            if (list.contains(secondNode)) {
+                break;
+            }
+            secondNode = secondNode.next;
         }
-        return head1;
+
+        return secondNode.data;
     }
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -100,6 +101,9 @@ public class MergeTwoSortedLinkedlists {
         scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
         for (int testsItr = 0; testsItr < tests; testsItr++) {
+            int index = scanner.nextInt();
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
             SinglyLinkedList llist1 = new SinglyLinkedList();
 
             int llist1Count = scanner.nextInt();
@@ -124,9 +128,26 @@ public class MergeTwoSortedLinkedlists {
                 llist2.insertNode(llist2Item);
             }
 
-            SinglyLinkedListNode llist3 = mergeLists(llist1.head, llist2.head);
+            SinglyLinkedListNode ptr1 = llist1.head;
+            SinglyLinkedListNode ptr2 = llist2.head;
 
-            printSinglyLinkedList(llist3, " ", bufferedWriter);
+            for (int i = 0; i < llist1Count; i++) {
+                if (i < index) {
+                    ptr1 = ptr1.next;
+                }
+            }
+
+            for (int i = 0; i < llist2Count; i++) {
+                if (i != llist2Count - 1) {
+                    ptr2 = ptr2.next;
+                }
+            }
+
+            ptr2.next = ptr1;
+
+            int result = findMergeNode(llist1.head, llist2.head);
+
+            bufferedWriter.write(String.valueOf(result));
             bufferedWriter.newLine();
         }
 
